@@ -48,9 +48,6 @@ public class MastermindBase : MonoBehaviour
 
     private void Start()
     {
-        _loveGaugeUI.SetArrowToSection(Random.Range(0, _loveGaugeUI.SectionsAmount));
-        GenerateResultCode();
-        
         StartGameplay();
     }
 
@@ -65,6 +62,10 @@ public class MastermindBase : MonoBehaviour
 
     void StartGameplay()
     {
+        _loveGaugeUI.SetArrowToSection(Random.Range(0, _loveGaugeUI.SectionsAmount));
+        GenerateResultCode();
+        ResetMagicCircle();
+        
         ResetGame();
         turnMoment = TurnMoment.ReceivingInput;
     }
@@ -150,9 +151,10 @@ public class MastermindBase : MonoBehaviour
 
     private IEnumerator CheckCodeRoutine()
     {
+        ResetMagicCircle();
+        
         //First, check if we got the right code
         List<bool> options = new();
-        EventBus.Send(new HighlighCodeEvent() { ShouldHighlight = options }); //Reset
 
         for (int i = 0; i < playerInput.Length; i++)
         {
@@ -162,8 +164,7 @@ public class MastermindBase : MonoBehaviour
         EventBus.Send(new HighlighCodeEvent() { ShouldHighlight = options });
         yield return new WaitForSeconds(1);
 
-        options = options.Select(x => false).ToList();
-        EventBus.Send(new HighlighCodeEvent() { ShouldHighlight = options }); //Reset
+        ResetMagicCircle();
 
         //Then show the player the result of each option
         for (int i = 0; i < options.Count; i++)
@@ -185,12 +186,7 @@ public class MastermindBase : MonoBehaviour
         }
         
         //Finally, go to the next turn
-        for (int i = 0; i < options.Count; i++)
-        {
-            options[i] = false;
-        }
-        
-        EventBus.Send(new HighlighCodeEvent() { ShouldHighlight = options });
+        ResetMagicCircle();
 
         yield return new WaitForSeconds(1);
         AdvanceTurn();
@@ -225,5 +221,19 @@ public class MastermindBase : MonoBehaviour
     {
         Debug.Log(text);
         EventBus.Send(new OnPrintDebug() { Text = text });
+    }
+    
+    
+    private void ResetMagicCircle()
+    {
+        //Reset maic circle
+        List<bool> circleHighlightSections = new();
+
+        for (int i = 0; i < numMaxElements; i++)
+        {
+            circleHighlightSections.Add(false);
+        }
+        
+        EventBus.Send(new HighlighCodeEvent() { ShouldHighlight = circleHighlightSections }); 
     }
 }
