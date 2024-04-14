@@ -7,7 +7,7 @@ public class GrabbableObject : MonoBehaviour
     private Rigidbody _rb;
 
     [SerializeField]
-    private ItemSlot _itemSettings;
+    private Item _itemSettings;
 
     private IEventBus EventBus => GameManager.Instance.EventBus;
 
