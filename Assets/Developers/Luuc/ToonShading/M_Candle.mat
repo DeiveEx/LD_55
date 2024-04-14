@@ -20,7 +20,7 @@ Material:
   m_CorrespondingSourceObject: {fileID: 0}
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
-  m_Name: M_ToonTest
+  m_Name: M_Candle
   m_Shader: {fileID: -6465566751694194690, guid: eb3748c7e6272314e9eff6310bac61aa,
     type: 3}
   m_Parent: {fileID: 0}
@@ -43,7 +43,7 @@ Material:
         m_Scale: {x: 1, y: 1}
         m_Offset: {x: 0, y: 0}
     - _NormalMap:
-        m_Texture: {fileID: 2800000, guid: e1d47abef34f4d24c92841e82dc74f0f, type: 3}
+        m_Texture: {fileID: 0}
         m_Scale: {x: 1, y: 1}
         m_Offset: {x: 0, y: 0}
     - _SampleTexture2D_17a20daed6854193bee9315b8a1ea5f9_Texture_1_Texture2D:
@@ -76,7 +76,7 @@ Material:
     - _Cull: 2
     - _DstBlend: 0
     - _Float: 0
-    - _HighlightEdge: 0.8
+    - _HighlightEdge: 0.933
     - _QueueControl: 0
     - _QueueOffset: 0
     - _ShadowEdge: 0.5
@@ -86,7 +86,7 @@ Material:
     - _ZWrite: 1
     - _ZWriteControl: 0
     m_Colors:
-    - _ColorTint: {r: 0.8962264, g: 0.8962264, b: 0.8962264, a: 1}
-    - _GlowColor: {r: 1, g: 1, b: 1, a: 0}
+    - _ColorTint: {r: 0.8301887, g: 0.72578704, b: 0.5286579, a: 1}
+    - _GlowColor: {r: 4, g: 4, b: 4, a: 0}
     - _ShadowColor: {r: 0.17541826, g: 0.29578996, b: 0.509434, a: 0}
   m_BuildTextureStacks: []
