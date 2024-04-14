@@ -114,19 +114,10 @@ public class MastermindBase : MonoBehaviour
 
     void CodeSubmited(OnSubmitCode args)
     {
-
         Log("Receive code");
         if (turnMoment == TurnMoment.ReceivingInput)    // Also check if all slots are filled
         {
-            if (CheckIfWon(playerInput, resultCode))
-            {
-                Log("Right Code");
-            }
-            else
-            {
-                Log("Wrong Code");
-                AdvanceTurn();
-            }
+            StartCoroutine(CheckCodeRoutine());
         }
     }
 
@@ -241,6 +232,7 @@ public class MastermindBase : MonoBehaviour
     {
         //First, check if we got the right code
         List<bool> options = new();
+        EventBus.Send(new HighlighCodeEvent() { ShouldHighlight = options }); //Reset
 
         for (int i = 0; i < playerInput.Length; i++)
         {
@@ -248,17 +240,20 @@ public class MastermindBase : MonoBehaviour
         }
 
         EventBus.Send(new HighlighCodeEvent() { ShouldHighlight = options });
-        yield return new WaitForSeconds(2);
+        yield return new WaitForSeconds(1);
+
+        options = options.Select(x => false).ToList();
+        EventBus.Send(new HighlighCodeEvent() { ShouldHighlight = options }); //Reset
 
         //Then show the player the result of each option
         for (int i = 0; i < options.Count; i++)
         {
             for (int j = 0; j < options.Count; j++)
             {
-                options[i] = i == j;
+                options[j] = i == j;
             }
             
-            //Hightlight the option
+            //Highlight the option
             EventBus.Send(new HighlighCodeEvent() { ShouldHighlight = options });
             yield return new WaitForSeconds(.5f);
 
@@ -270,6 +265,13 @@ public class MastermindBase : MonoBehaviour
         }
         
         //Finally, go to the next turn
+        for (int i = 0; i < options.Count; i++)
+        {
+            options[i] = false;
+        }
+        
+        EventBus.Send(new HighlighCodeEvent() { ShouldHighlight = options });
+
         yield return new WaitForSeconds(1);
         AdvanceTurn();
     }
