@@ -1581,6 +1581,11 @@ PrefabInstance:
       propertyPath: m_Name
       value: Player
       objectReference: {fileID: 0}
+    - target: {fileID: 8553806053768649731, guid: 6b402fa15d9823f44afaf979c08cc7e8,
+        type: 3}
+      propertyPath: _dragSnappines
+      value: 0.1
+      objectReference: {fileID: 0}
     m_RemovedComponents: []
     m_RemovedGameObjects: []
     m_AddedGameObjects: []

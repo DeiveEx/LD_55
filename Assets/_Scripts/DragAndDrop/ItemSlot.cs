@@ -1,3 +1,4 @@
+using DG.Tweening;
 using Ignix.EventBusSystem;
 using UnityEngine;
 
@@ -5,6 +6,9 @@ using UnityEngine;
 public class ItemSlot : MonoBehaviour
 {
     [SerializeField] private Transform _snapPosition;
+    [SerializeField] private bool _snapOnTouch;
+    [SerializeField] private float _animDuration = .5f;
+    [SerializeField] private Ease _easing;
     
     private GrabbableObject _placedObject;
     private GameObject _placedGameObject;
@@ -20,8 +24,9 @@ public class ItemSlot : MonoBehaviour
         _placedObject = targetObject;
         _placedGameObject = targetObject.gameObject;
         _placedObject.OnPlaced();
-        
-        _placedObject.transform.SetPositionAndRotation(_snapPosition.position, _snapPosition.rotation);
+
+        _placedObject.transform.DOMove(_snapPosition.position, _animDuration).SetEase(_easing);
+        _placedObject.transform.DORotate(_snapPosition.rotation.eulerAngles, _animDuration).SetEase(_easing);
         EventBus.Send(new OnObjectPlaced() { Instance = _placedObject });
 
         return true;
@@ -29,6 +34,9 @@ public class ItemSlot : MonoBehaviour
 
     private void OnTriggerEnter(Collider other)
     {
+        if(!_snapOnTouch)
+            return;
+        
         if(other.attachedRigidbody == null ||
            !other.attachedRigidbody.TryGetComponent<GrabbableObject>(out var placedObject))
             return;

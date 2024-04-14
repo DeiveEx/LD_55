@@ -68,6 +68,9 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   _snapPosition: {fileID: 6409811755142896803}
+  _snapOnTouch: 0
+  _animDuration: 0.25
+  _easing: 9
 --- !u!1 &8512157453284134267
 GameObject:
   m_ObjectHideFlags: 0
