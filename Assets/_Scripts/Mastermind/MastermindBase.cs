@@ -4,6 +4,7 @@ using System.Collections.Generic;
 using System.Linq;
 using Ignix.EventBusSystem;
 using UnityEngine;
+using Random = UnityEngine.Random;
 
 public class MastermindBase : MonoBehaviour
 {
@@ -23,6 +24,7 @@ public class MastermindBase : MonoBehaviour
     public TurnMoment turnMoment;
     public ElementType[] resultCode;
     public ElementType[] playerInput;
+    public LoveGaugeUI _loveGaugeUI;
 
     [Header("Not Implemented")]
     // Play history
@@ -35,30 +37,21 @@ public class MastermindBase : MonoBehaviour
     private void OnEnable()
     {
         EventBus.Register<OnObjectPlacedOnItemSlotEvent>(ObjectPlacedOnSlot);
-        EventBus.Register<OnSubmitCode>(CodeSubmited);
+        EventBus.Register<OnSubmitCode>(CodeSubmitted);
     }
 
     private void OnDisable()
     {
         EventBus.Unregister<OnObjectPlacedOnItemSlotEvent>(ObjectPlacedOnSlot);
-        EventBus.Unregister<OnSubmitCode>(CodeSubmited);
+        EventBus.Unregister<OnSubmitCode>(CodeSubmitted);
     }
 
     private void Start()
     {
+        _loveGaugeUI.SetArrowToSection(Random.Range(0, _loveGaugeUI.SectionsAmount));
         GenerateResultCode();
+        
         StartGameplay();
-    }
-
-    private void Update()
-    {
-        if(turnMoment == TurnMoment.ReceivingInput)
-        {
-            if (Input.anyKeyDown)
-            {
-                ReceiveInput();
-            }
-        }
     }
 
     void ResetGame()
@@ -73,54 +66,24 @@ public class MastermindBase : MonoBehaviour
     void StartGameplay()
     {
         ResetGame();
-
         turnMoment = TurnMoment.ReceivingInput;
     }
-
 
     void AdvanceTurn()
     {
         currentTurn++;
         playerInputIndex = 0;
-
-        //ClearPlayerCode();
-
-        //Log("Next Turn");
+        Log("Next Turn");
     }
 
-    void ReceiveInput()
+    void CodeSubmitted(OnSubmitCode args)
     {
-        var input = ReadInput2(); 
-
-        if (turnMoment == TurnMoment.ReceivingInput && input!= ElementType.Empty)
-        {
-            if (playerInputIndex < numMaxElements)
-            {
-                playerInput[playerInputIndex] = input;
-                playerInputIndex++;
-
-                Log("Key Pressed: " + input);
-            }
-            
-            if(playerInputIndex == numMaxElements)
-            {
-                if(autoPlayCode || input == ElementType.Confirm)
-                {
-                    StartCoroutine(CheckCodeRoutine());
-                }
-            }
-        }
-    }
-
-    void CodeSubmited(OnSubmitCode args)
-    {
-        Log("Receive code");
+        Log($"Receive code: {string.Join(";", playerInput.Select(x => x))}");
         if (turnMoment == TurnMoment.ReceivingInput)    // Also check if all slots are filled
         {
             StartCoroutine(CheckCodeRoutine());
         }
     }
-
 
     void ObjectPlacedOnSlot(OnObjectPlacedOnItemSlotEvent args)
     {
@@ -162,70 +125,27 @@ public class MastermindBase : MonoBehaviour
         playerInput = new ElementType[numMaxElements];
     }
 
-
     void GenerateResultCode()
     {
-        // This should be random latter, now its deterministc
         resultCode = new ElementType[numMaxElements];
+
+        //Right now the password cannot have duplicated elements, we can chane later
+        List<ElementType> options = new();
+
+        foreach (ElementType elementType in Enum.GetValues(typeof(ElementType)))
+        {
+            if(elementType == ElementType.Empty || elementType == ElementType.Confirm)
+                continue;
+            
+            options.Add(elementType);
+        }
 
         for (int i = 0; i < numMaxElements; i++)
         {
-            resultCode[i] = (ElementType)(i+1);
+            var chosenElementIndex = Random.Range(0, options.Count); 
+            resultCode[i] = options[chosenElementIndex];
+            options.RemoveAt(chosenElementIndex);
         }
-    }
-
-    ElementType ReadInput(KeyCode key)
-    {
-        //Elements elel;
-
-        switch (key)
-        {
-            case KeyCode.A:
-                return ElementType.A;
-            case KeyCode.B:
-                return ElementType.B;
-            case KeyCode.C:
-                return ElementType.C;
-            case KeyCode.D:
-                return ElementType.D;
-            case KeyCode.E:
-                return ElementType.E;
-            case KeyCode.F:
-                return ElementType.F;
-            case KeyCode.G:
-                return ElementType.G;
-            case KeyCode.H:
-                return ElementType.H;
-            default:
-                return ElementType.Empty;
-        }
-    }
-
-
-    ElementType ReadInput2()
-    {
-        //Elements elel;
-
-        if (Input.GetKey(KeyCode.A))
-            return ElementType.A;
-        else if (Input.GetKey(KeyCode.B))
-            return ElementType.B;
-        else if (Input.GetKey(KeyCode.C))
-            return ElementType.C;
-        else if (Input.GetKey(KeyCode.D))
-            return ElementType.D;
-        else if (Input.GetKey(KeyCode.E))
-            return ElementType.E;
-        else if (Input.GetKey(KeyCode.F))
-            return ElementType.F;
-        else if (Input.GetKey(KeyCode.G))
-            return ElementType.G;
-        else if (Input.GetKey(KeyCode.H))
-            return ElementType.H;
-        else if (Input.GetKey(KeyCode.Space) || Input.GetKey(KeyCode.Return))
-            return ElementType.Confirm;
-        else
-            return ElementType.Empty;
     }
 
     private IEnumerator CheckCodeRoutine()
