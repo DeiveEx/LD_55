@@ -5,6 +5,8 @@ using UnityEngine;
 [SelectionBase]
 public class ItemSlot : MonoBehaviour
 {
+    [SerializeField] private int _slotIndex;
+
     [SerializeField] private Transform _snapPosition;
     [SerializeField] private bool _snapOnTouch;
     [SerializeField] private float _animDuration = .5f;
@@ -27,7 +29,7 @@ public class ItemSlot : MonoBehaviour
 
         _placedObject.transform.DOMove(_snapPosition.position, _animDuration).SetEase(_easing);
         _placedObject.transform.DORotate(_snapPosition.rotation.eulerAngles, _animDuration).SetEase(_easing);
-        EventBus.Send(new OnObjectPlaced() { Instance = _placedObject });
+        EventBus.Send(new OnObjectPlaced() { Instance = _placedObject, SlotIndex = _slotIndex });
 
         return true;
     }

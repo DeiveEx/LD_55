@@ -19,10 +19,12 @@ public class MastermindBase : MonoBehaviour
 
     [Header("Gameplay")]
     public TurnMoment turnMoment;
-    public Elements[] resultCode;
-    public Elements[] playerInput;
+    public ElementType[] resultCode;
+    public ElementType[] playerInput;
 
-
+    [Header("Not Implemented")]
+    // Play history
+    [Space]
     [SerializeField] int playerInputIndex;
 
     private void Start()
@@ -73,7 +75,7 @@ public class MastermindBase : MonoBehaviour
 
         var input = ReadInput2(); 
 
-        if (turnMoment == TurnMoment.ReceivingInput && input!= Elements.Empty)
+        if (turnMoment == TurnMoment.ReceivingInput && input!= ElementType.Empty)
         {
             if (playerInputIndex < 4)
             {
@@ -84,7 +86,7 @@ public class MastermindBase : MonoBehaviour
             }
             if(playerInputIndex == 4)
             {
-                if(autoPlayCode || input == Elements.Confirm)
+                if(autoPlayCode || input == ElementType.Confirm)
                 {
                     if (CheckIfWon(playerInput, resultCode))
                     {
@@ -100,7 +102,7 @@ public class MastermindBase : MonoBehaviour
         }
     }
 
-    bool CheckIfWon(Elements[] input, Elements[] result)
+    bool CheckIfWon(ElementType[] input, ElementType[] result)
     {
         for (int i = 0; i < input.Length; i++)
         {
@@ -113,61 +115,61 @@ public class MastermindBase : MonoBehaviour
 
     void ClearPlayerCode()
     {
-        playerInput = new Elements[4];
+        playerInput = new ElementType[4];
     }
 
 
-    Elements ReadInput(KeyCode key)
+    ElementType ReadInput(KeyCode key)
     {
         //Elements elel;
 
         switch (key)
         {
             case KeyCode.A:
-                return Elements.A;
+                return ElementType.A;
             case KeyCode.B:
-                return Elements.B;
+                return ElementType.B;
             case KeyCode.C:
-                return Elements.C;
+                return ElementType.C;
             case KeyCode.D:
-                return Elements.D;
+                return ElementType.D;
             case KeyCode.E:
-                return Elements.E;
+                return ElementType.E;
             case KeyCode.F:
-                return Elements.F;
+                return ElementType.F;
             case KeyCode.G:
-                return Elements.G;
+                return ElementType.G;
             case KeyCode.H:
-                return Elements.H;
+                return ElementType.H;
             default:
-                return Elements.Empty;
+                return ElementType.Empty;
         }
     }
 
 
-    Elements ReadInput2()
+    ElementType ReadInput2()
     {
         //Elements elel;
 
         if (Input.GetKey(KeyCode.A))
-            return Elements.A;
+            return ElementType.A;
         else if (Input.GetKey(KeyCode.B))
-            return Elements.B;
+            return ElementType.B;
         else if (Input.GetKey(KeyCode.C))
-            return Elements.C;
+            return ElementType.C;
         else if (Input.GetKey(KeyCode.D))
-            return Elements.D;
+            return ElementType.D;
         else if (Input.GetKey(KeyCode.E))
-            return Elements.E;
+            return ElementType.E;
         else if (Input.GetKey(KeyCode.F))
-            return Elements.F;
+            return ElementType.F;
         else if (Input.GetKey(KeyCode.G))
-            return Elements.G;
+            return ElementType.G;
         else if (Input.GetKey(KeyCode.H))
-            return Elements.H;
+            return ElementType.H;
         else if (Input.GetKey(KeyCode.Space) || Input.GetKey(KeyCode.Return))
-            return Elements.Confirm;
+            return ElementType.Confirm;
         else
-            return Elements.Empty;
+            return ElementType.Empty;
     }
 }

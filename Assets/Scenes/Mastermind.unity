@@ -225,6 +225,7 @@ GameObject:
   m_Component:
   - component: {fileID: 835467818}
   - component: {fileID: 835467817}
+  - component: {fileID: 835467819}
   m_Layer: 0
   m_Name: MAstermind
   m_TagString: Untagged
@@ -248,6 +249,7 @@ MonoBehaviour:
   currentTurn: 0
   numMaxElements: 4
   numMaxSlots: 0
+  autoPlayCode: 0
   turnMoment: 0
   resultCode: 01000000020000000300000004000000
   playerInput: 
@@ -267,6 +269,19 @@ Transform:
   m_Children: []
   m_Father: {fileID: 0}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+--- !u!114 &835467819
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 835467816}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 7afc5361957ac7d43b592e59a0b91967, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  loveAmount: 0
 --- !u!1 &1893828255
 GameObject:
   m_ObjectHideFlags: 0
