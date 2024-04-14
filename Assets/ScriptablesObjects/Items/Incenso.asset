@@ -14,3 +14,4 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   colorCode: 16
   elementType: 6
+  colorMaterial: {fileID: 2100000, guid: e8a474fe2e6a8bb419a9fa487ca102d1, type: 2}

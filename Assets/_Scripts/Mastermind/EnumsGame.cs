@@ -4,18 +4,6 @@ using UnityEngine;
 
 public class EnumsGame : MonoBehaviour
 {
-    // Start is called before the first frame update
-    void Start()
-    {
-        
-    }
-
-    // Update is called once per frame
-    void Update()
-    {
-        
-    }
-
 
 }
 
@@ -29,6 +17,10 @@ public enum ElementType{
     F,
     G,
     H,
+    I,
+    J,
+    K,
+    L,
     Confirm
 }
 

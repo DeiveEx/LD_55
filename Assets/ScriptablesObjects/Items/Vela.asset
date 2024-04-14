@@ -13,4 +13,5 @@ MonoBehaviour:
   m_Name: Vela
   m_EditorClassIdentifier: 
   colorCode: 128
-  elementType: 0
+  elementType: 12
+  colorMaterial: {fileID: 0}

@@ -13,4 +13,5 @@ MonoBehaviour:
   m_Name: Orgonita
   m_EditorClassIdentifier: 
   colorCode: 4096
-  elementType: 0
+  elementType: 9
+  colorMaterial: {fileID: 0}
