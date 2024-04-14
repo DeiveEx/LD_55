@@ -29,7 +29,7 @@ public class ItemSlot : MonoBehaviour
 
         _placedObject.transform.DOMove(_snapPosition.position, _animDuration).SetEase(_easing);
         _placedObject.transform.DORotate(_snapPosition.rotation.eulerAngles, _animDuration).SetEase(_easing);
-        EventBus.Send(new OnObjectPlaced() { Instance = _placedObject, SlotIndex = _slotIndex });
+        EventBus.Send(new OnObjectPlacedOnItemSlotEvent() { Instance = _placedObject, SlotIndex = _slotIndex });
 
         return true;
     }
@@ -51,6 +51,8 @@ public class ItemSlot : MonoBehaviour
         if(other.gameObject != _placedGameObject)
             return;
 
+        EventBus.Send(new OnObjectRemovedFromItemSlotEvent() { Instance = _placedObject, SlotIndex = _slotIndex });
+        
         _placedGameObject = null;
         _placedObject = null;
     }

@@ -23,12 +23,12 @@ public class DragController : MonoBehaviour
     {
         _camera = Camera.main;
         
-        EventBus.Register<OnObjectPlaced>(OnObjectPlaced);
+        EventBus.Register<OnObjectPlacedOnItemSlotEvent>(OnObjectPlaced);
     }
 
     private void OnDestroy()
     {
-        EventBus.Unregister<OnObjectPlaced>(OnObjectPlaced);
+        EventBus.Unregister<OnObjectPlacedOnItemSlotEvent>(OnObjectPlaced);
     }
 
     private void Update()
@@ -59,7 +59,7 @@ public class DragController : MonoBehaviour
             DropObject();
     }
     
-    private void OnObjectPlaced(OnObjectPlaced args)
+    private void OnObjectPlaced(OnObjectPlacedOnItemSlotEvent args)
     {
         if(_heldObject != args.Instance)
             return;
