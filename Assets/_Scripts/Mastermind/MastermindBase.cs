@@ -8,6 +8,10 @@ using Random = UnityEngine.Random;
 
 public class MastermindBase : MonoBehaviour
 {
+    [Header("References")]
+    public LoveGaugeUI _loveGaugeUI;
+    public CurrentDayUI _currentDayDisplay;
+    
     [Header("Settings")]
     public int maxNumTurns = 7;
     public int currentTurn = 0;
@@ -24,7 +28,6 @@ public class MastermindBase : MonoBehaviour
     public TurnMoment turnMoment;
     public ElementType[] resultCode;
     public ElementType[] playerInput;
-    public LoveGaugeUI _loveGaugeUI;
 
     [Header("Not Implemented")]
     // Play history
@@ -68,6 +71,7 @@ public class MastermindBase : MonoBehaviour
         
         ResetGame();
         turnMoment = TurnMoment.ReceivingInput;
+        _currentDayDisplay.SetCurrentDay(currentTurn);
     }
 
     void AdvanceTurn()
@@ -75,10 +79,16 @@ public class MastermindBase : MonoBehaviour
         currentTurn++;
         playerInputIndex = 0;
         Log("Next Turn");
+        
+        _currentDayDisplay.SetCurrentDay(currentTurn);
     }
 
     void CodeSubmitted(OnSubmitCode args)
     {
+        //Is the code valid?
+        if(playerInput.Any(x => x == ElementType.Empty || x == ElementType.Confirm))
+            return;
+        
         Log($"Receive code: {string.Join(";", playerInput.Select(x => x))}");
         if (turnMoment == TurnMoment.ReceivingInput)    // Also check if all slots are filled
         {
