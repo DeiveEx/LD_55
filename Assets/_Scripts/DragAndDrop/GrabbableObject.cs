@@ -8,6 +8,7 @@ public class GrabbableObject : MonoBehaviour
 
     [SerializeField]
     private Item _itemSettings;
+    public Item ItemSettings { get { return _itemSettings; } }
 
     private IEventBus EventBus => GameManager.Instance.EventBus;
 
@@ -31,5 +32,16 @@ public class GrabbableObject : MonoBehaviour
     public void OnPlaced()
     {
         
+    }
+
+
+    // Editor Help Functions
+
+    [ContextMenu("SetMaterial")]
+    private void SetMaterial()
+    {
+        var rend = GetComponentInChildren<Renderer>();
+
+        rend.material = _itemSettings.colorMaterial;
     }
 }

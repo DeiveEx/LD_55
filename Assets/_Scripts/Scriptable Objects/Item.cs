@@ -6,4 +6,8 @@ using UnityEngine;
 public class Item : ScriptableObject
 {
     public ColorCode colorCode;
+
+    public ElementType elementType;
+
+    public Material colorMaterial;
 }

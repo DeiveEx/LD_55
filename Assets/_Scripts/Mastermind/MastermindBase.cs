@@ -2,6 +2,7 @@ using System;
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using Ignix.EventBusSystem;
 
 public class MastermindBase : MonoBehaviour
 {
@@ -27,8 +28,26 @@ public class MastermindBase : MonoBehaviour
     [Space]
     [SerializeField] int playerInputIndex;
 
+
+    // --- Event Buss ---
+    private IEventBus EventBus => GameManager.Instance.EventBus;
+
+    private void OnEnable()
+    {
+        EventBus.Register<OnObjectPlacedOnItemSlotEvent>(ObjectPlacedOnSlot);
+        EventBus.Register<OnSubmitCode>(CodeSubmited);
+    }
+
+    private void OnDisable()
+    {
+        EventBus.Unregister<OnObjectPlacedOnItemSlotEvent>(ObjectPlacedOnSlot);
+        EventBus.Unregister<OnSubmitCode>(CodeSubmited);
+    }
+
     private void Start()
     {
+        GenerateResultCode();
+
         StartGameplay();
     }
 
@@ -65,39 +84,81 @@ public class MastermindBase : MonoBehaviour
         currentTurn++;
         playerInputIndex = 0;
 
-        ClearPlayerCode();
+        //ClearPlayerCode();
 
-        Debug.Log("Next Turn");
+        Log("Next Turn");
     }
 
     void ReceiveInput()
     {
-
         var input = ReadInput2(); 
 
         if (turnMoment == TurnMoment.ReceivingInput && input!= ElementType.Empty)
         {
-            if (playerInputIndex < 4)
+            if (playerInputIndex < numMaxElements)
             {
                 playerInput[playerInputIndex] = input;
                 playerInputIndex++;
 
-                Debug.Log("Key Pressed: " + input);
+                Log("Key Pressed: " + input);
             }
-            if(playerInputIndex == 4)
+            if(playerInputIndex == numMaxElements)
             {
                 if(autoPlayCode || input == ElementType.Confirm)
                 {
                     if (CheckIfWon(playerInput, resultCode))
                     {
-                        Debug.Log("Right Code");
+                        Log("Right Code");
                     }
                     else
                     {
-                        Debug.Log("Wrong Code");
+                        Log("Wrong Code");
                         AdvanceTurn();
                     }
                 }
+            }
+        }
+    }
+
+    void CodeSubmited(OnSubmitCode args)
+    {
+
+        Log("Receive code");
+        if (turnMoment == TurnMoment.ReceivingInput)    // Also check if all slots are filled
+        {
+            if (CheckIfWon(playerInput, resultCode))
+            {
+                Log("Right Code");
+            }
+            else
+            {
+                Log("Wrong Code");
+                AdvanceTurn();
+            }
+        }
+    }
+
+
+    void ObjectPlacedOnSlot(OnObjectPlacedOnItemSlotEvent args)
+    {
+        ReceiveItem(args.Instance.ItemSettings, args.SlotIndex);
+    }
+
+    void ReceiveItem(Item item, int slotPos)
+    {
+        var inputType = item.elementType;
+
+        if (turnMoment == TurnMoment.ReceivingInput && inputType != ElementType.Empty)
+        {
+            if (slotPos < numMaxElements)
+            {
+                playerInput[slotPos] = inputType;
+
+                Log(string.Format("Placed item {0} on slot {1}", inputType.ToString(), slotPos)); //"Received Item: " + inputType
+            }
+            else
+            {
+                Log("Invalid item slot");
             }
         }
     }
@@ -115,9 +176,20 @@ public class MastermindBase : MonoBehaviour
 
     void ClearPlayerCode()
     {
-        playerInput = new ElementType[4];
+        playerInput = new ElementType[numMaxElements];
     }
 
+
+    void GenerateResultCode()
+    {
+        // This should be random latter, now its deterministc
+        resultCode = new ElementType[numMaxElements];
+
+        for (int i = 0; i < numMaxElements; i++)
+        {
+            resultCode[i] = (ElementType)(i+1);
+        }
+    }
 
     ElementType ReadInput(KeyCode key)
     {
@@ -171,5 +243,11 @@ public class MastermindBase : MonoBehaviour
             return ElementType.Confirm;
         else
             return ElementType.Empty;
+    }
+
+    private void Log(string text)
+    {
+        Debug.Log(text);
+        EventBus.Send(new OnPrintDebug() { Text = text });
     }
 }
