@@ -753,6 +753,11 @@ PrefabInstance:
       propertyPath: m_LocalEulerAnglesHint.z
       value: 0
       objectReference: {fileID: 0}
+    - target: {fileID: 8013069321959591647, guid: 3bab13b4bd6d6f54b8649e1d159f46c8,
+        type: 3}
+      propertyPath: _minMaxEmotionIndex.y
+      value: 0
+      objectReference: {fileID: 0}
     m_RemovedComponents: []
     m_RemovedGameObjects: []
     m_AddedGameObjects: []
@@ -766,10 +771,30 @@ PrefabInstance:
     serializedVersion: 3
     m_TransformParent: {fileID: 2122108877}
     m_Modifications:
+    - target: {fileID: 312901911873252017, guid: 8d69b5e9218201c4dabb5c713e0f506b,
+        type: 3}
+      propertyPath: _angleeOffset
+      value: 45
+      objectReference: {fileID: 0}
     - target: {fileID: 3463595961110934305, guid: 8d69b5e9218201c4dabb5c713e0f506b,
         type: 3}
       propertyPath: m_Name
       value: EmotionGaugeUI
+      objectReference: {fileID: 0}
+    - target: {fileID: 5064673014803953155, guid: 8d69b5e9218201c4dabb5c713e0f506b,
+        type: 3}
+      propertyPath: m_LocalRotation.w
+      value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 5064673014803953155, guid: 8d69b5e9218201c4dabb5c713e0f506b,
+        type: 3}
+      propertyPath: m_LocalRotation.z
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 5064673014803953155, guid: 8d69b5e9218201c4dabb5c713e0f506b,
+        type: 3}
+      propertyPath: m_LocalEulerAnglesHint.z
+      value: 0
       objectReference: {fileID: 0}
     - target: {fileID: 8304621914860469090, guid: 8d69b5e9218201c4dabb5c713e0f506b,
         type: 3}

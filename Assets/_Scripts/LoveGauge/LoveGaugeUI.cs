@@ -4,7 +4,6 @@ using Ignix.EventBusSystem;
 using UnityEngine;
 using UnityEngine.InputSystem;
 using UnityEngine.UI;
-using Random = UnityEngine.Random;
 
 public class LoveGaugeUI : MonoBehaviour
 {
@@ -32,7 +31,21 @@ public class LoveGaugeUI : MonoBehaviour
     {
         EventBus.Unregister<OnPointAddedEvent>(OnPointAdded);
     }
-    
+
+    private void Update()
+    {
+#if UNITY_EDITOR
+        if(Keyboard.current.qKey.wasPressedThisFrame)
+            AddPoint(-1);
+        
+        if(Keyboard.current.wKey.wasPressedThisFrame)
+            AddPoint(0);
+        
+        if(Keyboard.current.eKey.wasPressedThisFrame)
+            AddPoint(1);
+#endif
+    }
+
     private void OnPointAdded(OnPointAddedEvent args)
     {
         AddPoint(args.Amount, true);
@@ -41,7 +54,12 @@ public class LoveGaugeUI : MonoBehaviour
     public void SetArrowToSection(int sectionIndex, bool animate = false)
     {
         var previousIndex = _currentSectionIndex;
-        _currentSectionIndex = sectionIndex % _sectionsAmount;
+        var targetIndex = sectionIndex % _sectionsAmount;
+
+        if (targetIndex < 0)
+            targetIndex = 0;
+        
+        _currentSectionIndex = targetIndex;
         Vector3 rot = new Vector3();
 
         float step = 360 / (float)_sectionsAmount;
