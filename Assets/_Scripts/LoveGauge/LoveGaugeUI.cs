@@ -19,6 +19,8 @@ public class LoveGaugeUI : MonoBehaviour
     private int _currentSectionIndex;
 
     public int CurrentSectionIndex => _currentSectionIndex;
+    public int SectionsAmount => _sectionsAmount;
+
     private IEventBus EventBus => GameManager.Instance.EventBus;
 
     private void Awake()

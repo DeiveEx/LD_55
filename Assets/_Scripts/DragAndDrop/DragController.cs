@@ -71,6 +71,8 @@ public class DragController : MonoBehaviour
     {
         var ray = _camera.ScreenPointToRay(_mousePos);
         
+        Debug.DrawRay(ray.origin, ray.direction * 1000, Color.red, 2);
+        
         if(!Physics.Raycast(ray, out var hit, 1000, _grabableMask))
             return;
         
