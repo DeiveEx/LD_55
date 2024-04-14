@@ -8,6 +8,8 @@ public class DragController : MonoBehaviour
     [SerializeField] private LayerMask _groundMask;
     [SerializeField] private LayerMask _grabableMask;
     [SerializeField] private LayerMask _itemSlotMask;
+    [Range(0, 1)]
+    [SerializeField] private float _dragSnappines = .9f;
     [SerializeField] private float _heldHeight = 1; //How high from the plane should the object be
 
     private Camera _camera;
@@ -34,7 +36,7 @@ public class DragController : MonoBehaviour
         if(!_heldObject)
             return;
 
-        _heldObject.transform.position = _targetPos;
+        _heldObject.transform.position = Vector3.Lerp(_heldObject.transform.position, _targetPos, _dragSnappines);
     }
 
     public void OnMove(InputValue value)
