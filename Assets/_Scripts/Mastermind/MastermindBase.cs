@@ -1,8 +1,9 @@
 using System;
 using System.Collections;
 using System.Collections.Generic;
-using UnityEngine;
+using System.Linq;
 using Ignix.EventBusSystem;
+using UnityEngine;
 
 public class MastermindBase : MonoBehaviour
 {
@@ -28,7 +29,6 @@ public class MastermindBase : MonoBehaviour
     [Space]
     [SerializeField] int playerInputIndex;
 
-
     // --- Event Buss ---
     private IEventBus EventBus => GameManager.Instance.EventBus;
 
@@ -47,7 +47,6 @@ public class MastermindBase : MonoBehaviour
     private void Start()
     {
         GenerateResultCode();
-
         StartGameplay();
     }
 
@@ -102,19 +101,12 @@ public class MastermindBase : MonoBehaviour
 
                 Log("Key Pressed: " + input);
             }
+            
             if(playerInputIndex == numMaxElements)
             {
                 if(autoPlayCode || input == ElementType.Confirm)
                 {
-                    if (CheckIfWon(playerInput, resultCode))
-                    {
-                        Log("Right Code");
-                    }
-                    else
-                    {
-                        Log("Wrong Code");
-                        AdvanceTurn();
-                    }
+                    StartCoroutine(CheckCodeRoutine());
                 }
             }
         }
@@ -243,6 +235,68 @@ public class MastermindBase : MonoBehaviour
             return ElementType.Confirm;
         else
             return ElementType.Empty;
+    }
+
+    private IEnumerator CheckCodeRoutine()
+    {
+        //First, check if we got the right code
+        List<bool> options = new();
+
+        for (int i = 0; i < playerInput.Length; i++)
+        {
+            options.Add(GetPointForInput(i) == 1);
+        }
+
+        EventBus.Send(new HighlighCodeEvent() { ShouldHighlight = options });
+        yield return new WaitForSeconds(2);
+
+        //Then show the player the result of each option
+        for (int i = 0; i < options.Count; i++)
+        {
+            for (int j = 0; j < options.Count; j++)
+            {
+                options[i] = i == j;
+            }
+            
+            //Hightlight the option
+            EventBus.Send(new HighlighCodeEvent() { ShouldHighlight = options });
+            yield return new WaitForSeconds(.5f);
+
+            int amount = GetPointForInput(i);
+            
+            //Move the clock pointer
+            EventBus.Send(new OnPointAddedEvent(){ Amount = amount});
+            yield return new WaitForSeconds(.5f);
+        }
+        
+        //Finally, go to the next turn
+        yield return new WaitForSeconds(1);
+        AdvanceTurn();
+    }
+
+    private int GetPointForInput(int index)
+    {
+        int amount = 0;
+
+        var input = playerInput[index];
+        
+        //Correct item, correct position
+        if (resultCode[index] == input)
+        {
+            amount = 1;
+        }
+        //Correct item, wrong position
+        else if(resultCode.Contains(input))
+        {
+            amount = 0;
+        }
+        //Wrong item, wrong position
+        else
+        {
+            amount = -1;
+        }
+        
+        return amount;
     }
 
     private void Log(string text)

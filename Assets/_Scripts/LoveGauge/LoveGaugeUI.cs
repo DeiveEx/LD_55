@@ -1,4 +1,6 @@
+using System;
 using DG.Tweening;
+using Ignix.EventBusSystem;
 using UnityEngine;
 using UnityEngine.InputSystem;
 using UnityEngine.UI;
@@ -17,22 +19,21 @@ public class LoveGaugeUI : MonoBehaviour
     private int _currentSectionIndex;
 
     public int CurrentSectionIndex => _currentSectionIndex;
+    private IEventBus EventBus => GameManager.Instance.EventBus;
 
-    private void Start()
+    private void Awake()
     {
-        SetArrowToSection(Random.Range(0, _sectionsAmount));
+        EventBus.Register<OnPointAddedEvent>(OnPointAdded);
     }
 
-    private void Update()
+    private void OnDestroy()
     {
-        if(Keyboard.current.qKey.wasPressedThisFrame)
-            AddPoint(-1);
-        
-        if(Keyboard.current.wKey.wasPressedThisFrame)
-            AddPoint(0);
-        
-        if(Keyboard.current.eKey.wasPressedThisFrame)
-            AddPoint(1);
+        EventBus.Unregister<OnPointAddedEvent>(OnPointAdded);
+    }
+    
+    private void OnPointAdded(OnPointAddedEvent args)
+    {
+        AddPoint(args.Amount, true);
     }
 
     public void SetArrowToSection(int sectionIndex, bool animate = false)
