@@ -82,6 +82,7 @@ public class MastermindBase : MonoBehaviour
         Log("Next Turn");
         
         _currentDayDisplay.SetCurrentDay(currentTurn);
+        EventBus.Send(new OnTurnStartedEvent());
     }
 
     void CodeSubmitted(OnSubmitCode args)
