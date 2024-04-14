@@ -85,7 +85,7 @@ public class MastermindBase : MonoBehaviour
 
         //ClearPlayerCode();
 
-        Log("Next Turn");
+        //Log("Next Turn");
     }
 
     void ReceiveInput()
