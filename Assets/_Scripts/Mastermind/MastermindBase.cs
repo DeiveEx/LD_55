@@ -15,6 +15,7 @@ public class MastermindBase : MonoBehaviour
     [Header("Settings")]
     public int maxNumTurns = 7;
     public int currentTurn = 0;
+    public Vector2Int _minMaxEmotionIndex = new Vector2Int(0, 8);
 
     public int numMaxElements = 4;
 
@@ -65,7 +66,7 @@ public class MastermindBase : MonoBehaviour
 
     void StartGameplay()
     {
-        _loveGaugeUI.SetArrowToSection(Random.Range(0, _loveGaugeUI.SectionsAmount));
+        _loveGaugeUI.SetArrowToSection(Random.Range(_minMaxEmotionIndex.x, _minMaxEmotionIndex.y));
         GenerateResultCode();
         ResetMagicCircle();
         
@@ -81,6 +82,7 @@ public class MastermindBase : MonoBehaviour
         Log("Next Turn");
         
         _currentDayDisplay.SetCurrentDay(currentTurn);
+        EventBus.Send(new OnTurnStartedEvent());
     }
 
     void CodeSubmitted(OnSubmitCode args)
