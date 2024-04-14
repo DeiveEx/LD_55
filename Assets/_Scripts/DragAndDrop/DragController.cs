@@ -1,3 +1,5 @@
+using System;
+using Ignix.EventBusSystem;
 using UnityEngine;
 using UnityEngine.InputSystem;
 
@@ -5,16 +7,26 @@ public class DragController : MonoBehaviour
 {
     [SerializeField] private LayerMask _groundMask;
     [SerializeField] private LayerMask _grabableMask;
+    [SerializeField] private LayerMask _itemSlotMask;
     [SerializeField] private float _heldHeight = 1; //How high from the plane should the object be
 
     private Camera _camera;
     private GrabbableObject _heldObject;
     private Vector2 _mousePos;
     private Vector3 _targetPos;
+    
+    private IEventBus EventBus => GameManager.Instance.EventBus;
 
     private void Awake()
     {
         _camera = Camera.main;
+        
+        EventBus.Register<OnObjectPlaced>(OnObjectPlaced);
+    }
+
+    private void OnDestroy()
+    {
+        EventBus.Unregister<OnObjectPlaced>(OnObjectPlaced);
     }
 
     private void Update()
@@ -33,7 +45,6 @@ public class DragController : MonoBehaviour
         if(!Physics.Raycast(ray, out var hit, 1000, _groundMask))
             return;
 
-        Debug.Log($"{hit.collider.name}");
         _targetPos = hit.point;
         _targetPos.y += _heldHeight;
     }
@@ -44,6 +55,14 @@ public class DragController : MonoBehaviour
             TryGrabObject();
         else
             DropObject();
+    }
+    
+    private void OnObjectPlaced(OnObjectPlaced args)
+    {
+        if(_heldObject != args.Instance)
+            return;
+
+        _heldObject = null;
     }
 
     private void TryGrabObject()
@@ -61,6 +80,24 @@ public class DragController : MonoBehaviour
     }
 
     private void DropObject()
+    {
+        //Check if there's an itemSlot below
+        var ray = _camera.ScreenPointToRay(_mousePos);
+        bool placed = false;
+
+        if (Physics.Raycast(ray, out var hit, 1000, _itemSlotMask))
+        {
+            //Check if we can place the object in this slot
+            var itemSlot = hit.collider.GetComponent<ItemSlot>();
+            placed = itemSlot.TryPlaceObject(_heldObject);
+        }
+        
+        //If we couldn't place the object, simply drop it
+        if(!placed)
+            FreeDrop();
+    }
+
+    private void FreeDrop()
     {
         _heldObject.OnDrop();
         _heldObject = null;

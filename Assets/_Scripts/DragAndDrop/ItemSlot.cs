@@ -1,5 +1,7 @@
+using Ignix.EventBusSystem;
 using UnityEngine;
 
+[SelectionBase]
 public class ItemSlot : MonoBehaviour
 {
     [SerializeField] private Transform _snapPosition;
@@ -8,6 +10,22 @@ public class ItemSlot : MonoBehaviour
     private GameObject _placedGameObject;
 
     public GrabbableObject PlacedObject => _placedObject;
+    private IEventBus EventBus => GameManager.Instance.EventBus;
+
+    public bool TryPlaceObject(GrabbableObject targetObject)
+    {
+        if (_placedObject != null)
+            return false;
+        
+        _placedObject = targetObject;
+        _placedGameObject = targetObject.gameObject;
+        _placedObject.OnPlaced();
+        
+        _placedObject.transform.SetPositionAndRotation(_snapPosition.position, _snapPosition.rotation);
+        EventBus.Send(new OnObjectPlaced() { Instance = _placedObject });
+
+        return true;
+    }
 
     private void OnTriggerEnter(Collider other)
     {
@@ -15,10 +33,7 @@ public class ItemSlot : MonoBehaviour
            !other.attachedRigidbody.TryGetComponent<GrabbableObject>(out var placedObject))
             return;
 
-        _placedObject = placedObject;
-        _placedGameObject = placedObject.gameObject;
-        
-        _placedObject.transform.SetPositionAndRotation(_snapPosition.position, _snapPosition.rotation);
+        TryPlaceObject(placedObject);
     }
 
     private void OnTriggerExit(Collider other)
