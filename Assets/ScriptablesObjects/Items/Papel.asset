@@ -13,4 +13,5 @@ MonoBehaviour:
   m_Name: Papel
   m_EditorClassIdentifier: 
   colorCode: 4
-  elementType: 0
+  elementType: 10
+  colorMaterial: {fileID: 0}

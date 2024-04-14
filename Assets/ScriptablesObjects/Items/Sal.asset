@@ -13,4 +13,5 @@ MonoBehaviour:
   m_Name: Sal
   m_EditorClassIdentifier: 
   colorCode: 2
-  elementType: 0
+  elementType: 11
+  colorMaterial: {fileID: 0}
