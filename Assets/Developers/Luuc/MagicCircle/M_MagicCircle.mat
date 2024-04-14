@@ -46,17 +46,17 @@ Material:
         m_Offset: {x: 0, y: 0}
     m_Ints: []
     m_Floats:
-    - _HighlightEdge0: 0.034
+    - _HighlightEdge0: 0
     - _HighlightEdge1: 1
     - _HighlightEdge2: 0
-    - _HighlightEdge3: 0.97
+    - _HighlightEdge3: 0
     - _HighlightEdge4: 0
-    - _MagicSizeThreshold: 0.642
+    - _MagicSizeThreshold: 0.75
     - _QueueControl: 0
     - _QueueOffset: 0
     m_Colors:
-    - _Color: {r: 0.009433985, g: 0.008409922, b: 0.006630489, a: 0}
-    - _HighlightColorTint: {r: 14.259475, g: 0.20178466, b: 4.2088675, a: 0}
+    - _Color: {r: 0.175, g: 0.33632812, b: 0.35, a: 0}
+    - _HighlightColorTint: {r: 8.47419, g: 2.9219007, b: 0.5423482, a: 0}
   m_BuildTextureStacks: []
 --- !u!114 &5361772059682733252
 MonoBehaviour:
