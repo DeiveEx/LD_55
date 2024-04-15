@@ -7,7 +7,7 @@
             "actions": [
                 {
                     "name": "Grab",
-                    "type": "Button",
+                    "type": "Value",
                     "id": "45099c9e-620f-4c61-9923-89ab3459ea47",
                     "expectedControlType": "Button",
                     "processors": "",

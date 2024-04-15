@@ -67,9 +67,12 @@ public class DragController : MonoBehaviour
 
     public void OnGrab(InputValue value)
     {
-        if(_heldObject == null)
+        bool isPressed = value.Get<float>() > 0;
+        
+        if(isPressed && _heldObject == null)
             TryGrabObject();
-        else
+
+        if(!isPressed && _heldObject != null)
             DropObject();
     }
     
