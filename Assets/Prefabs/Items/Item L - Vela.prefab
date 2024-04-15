@@ -285,6 +285,16 @@ PrefabInstance:
       propertyPath: m_IsActive
       value: 1
       objectReference: {fileID: 0}
+    - target: {fileID: 6307156335004083220, guid: 379e446118018dc49a893166924493bb,
+        type: 3}
+      propertyPath: m_Size.y
+      value: 1.6536582
+      objectReference: {fileID: 0}
+    - target: {fileID: 6307156335004083220, guid: 379e446118018dc49a893166924493bb,
+        type: 3}
+      propertyPath: m_Center.y
+      value: 0.8268291
+      objectReference: {fileID: 0}
     - target: {fileID: 9029678845924695854, guid: 379e446118018dc49a893166924493bb,
         type: 3}
       propertyPath: _itemSettings
