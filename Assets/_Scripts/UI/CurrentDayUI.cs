@@ -16,7 +16,7 @@ public class CurrentDayUI : MonoBehaviour
 
     public void SetCurrentDay(int currentTurn)
     {
-        _text.text = $"DIA {currentTurn + 1}";
+        _text.text = $"Dia {currentTurn + 1}";
 
         var sequence = DOTween.Sequence();
         sequence.Append(_canvasGroup.DOFade(1, _fadeDuration));
