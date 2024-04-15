@@ -9,6 +9,10 @@ public class GrabbableObject : MonoBehaviour
     [SerializeField] private Item _itemSettings;
     [SerializeField] private float _returnAnimDuration = .5f;
     [SerializeField] private Ease _retunAnimEase;
+    [SerializeField] private AudioClip _grabSound;
+    [SerializeField] private AudioClip _dropSound;
+    [SerializeField] private AudioClip _hitSound;
+    [SerializeField] private AudioSource _audioSource;
     
     private Rigidbody _rb;
     private Vector3 _startPos;
@@ -43,17 +47,24 @@ public class GrabbableObject : MonoBehaviour
     {
         _rb.isKinematic = true;
         EventBus.Send(new OnObjectGrabbedEvent() { Instance = this});
+        _audioSource.PlayOneShot(_grabSound);
     }
 
     public void OnDrop()
     {
         _rb.isKinematic = false;
         EventBus.Send(new OnObjectDroppedEvent() { Instance = this});
+        _audioSource.PlayOneShot(_dropSound);
     }
 
     public void OnPlaced()
     {
-        
+        _audioSource.PlayOneShot(_dropSound);
+    }
+
+    private void OnCollisionEnter(Collision other)
+    {
+        _audioSource.PlayOneShot(_hitSound);
     }
 
 
