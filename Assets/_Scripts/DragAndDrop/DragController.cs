@@ -61,8 +61,7 @@ public class DragController : MonoBehaviour
         if(!Physics.Raycast(ray, out var hit, 1000, _groundMask))
             return;
 
-        _targetPos = hit.point;
-        _targetPos.y += _heldHeight;
+        _targetPos = hit.point - (ray.direction * _heldHeight);
     }
 
     public void OnGrab(InputValue value)
