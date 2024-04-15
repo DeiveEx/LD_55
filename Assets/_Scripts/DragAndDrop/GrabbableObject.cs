@@ -2,6 +2,7 @@ using System;
 using DG.Tweening;
 using Ignix.EventBusSystem;
 using UnityEngine;
+using Random = UnityEngine.Random;
 
 [SelectionBase]
 public class GrabbableObject : MonoBehaviour
@@ -64,6 +65,7 @@ public class GrabbableObject : MonoBehaviour
 
     private void OnCollisionEnter(Collision other)
     {
+        _audioSource.pitch = Random.Range(.9f, 1.1f);
         _audioSource.PlayOneShot(_hitSound);
     }
 
