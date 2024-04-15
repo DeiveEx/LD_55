@@ -85,4 +85,5 @@ MonoBehaviour:
   _itemSlotMask:
     serializedVersion: 2
     m_Bits: 256
-  _heldHeight: 2
+  _dragSnappines: 0.9
+  _heldHeight: 0.3
