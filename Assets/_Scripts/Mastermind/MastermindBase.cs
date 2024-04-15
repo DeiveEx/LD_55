@@ -11,6 +11,8 @@ public class MastermindBase : MonoBehaviour
     [Header("References")]
     public LoveGaugeUI _loveGaugeUI;
     public CurrentDayUI _currentDayDisplay;
+    public AudioSource _audioSource;
+    public AudioClip _submitClip;
     
     [Header("Settings")]
     public int maxNumTurns = 7;
@@ -117,6 +119,7 @@ public class MastermindBase : MonoBehaviour
 
         if (_allItemsPlaced)
         {
+            _audioSource.PlayOneShot(_submitClip);
             Debug.Log($"All Items placed: {_allItemsPlaced}");
             StartCoroutine(SubmitCountdownRoutine());
         }
@@ -126,6 +129,7 @@ public class MastermindBase : MonoBehaviour
     {
         Debug.Log($"Item {ars.Instance.ItemSettings.elementType} removed from Slot {ars.SlotIndex}");
         _allItemsPlaced = false;
+        _audioSource.Stop();
     }
 
     void ReceiveItem(Item item, int slotPos)
