@@ -38,9 +38,13 @@ Material:
   m_SavedProperties:
     serializedVersion: 3
     m_TexEnvs:
+    - _EmissiveTex:
+        m_Texture: {fileID: 0}
+        m_Scale: {x: 1, y: 1}
+        m_Offset: {x: 0, y: 0}
     - _MainText:
         m_Texture: {fileID: 2800000, guid: 0629dfea73fb36047a945838ec2e3cff, type: 3}
-        m_Scale: {x: 1, y: 1}
+        m_Scale: {x: 1.7, y: 1}
         m_Offset: {x: 0, y: 0}
     - _NormalMap:
         m_Texture: {fileID: 0}
@@ -87,6 +91,7 @@ Material:
     - _ZWriteControl: 0
     m_Colors:
     - _ColorTint: {r: 1, g: 1, b: 1, a: 1}
+    - _EmissiveTint: {r: 1, g: 1, b: 1, a: 0}
     - _GlowColor: {r: 4, g: 4, b: 4, a: 0}
     - _ShadowColor: {r: 0.17541826, g: 0.29578996, b: 0.509434, a: 0}
   m_BuildTextureStacks: []
