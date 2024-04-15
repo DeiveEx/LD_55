@@ -31,7 +31,7 @@ public class MastermindBase : MonoBehaviour
     [Header("Gameplay")]
     public GameState currentGameState;
     public ElementType[] resultCode;
-    public ElementType[] playerInput;
+    public Item[] playerInput;
 
     [Header("History")]
     public GameObject historyOrigin;
@@ -130,7 +130,7 @@ public class MastermindBase : MonoBehaviour
     private void CodeSubmitted()
     {
         //Is the code valid?
-        if(playerInput.Any(x => x == ElementType.Empty || x == ElementType.Confirm))
+        if(playerInput.Any(x => x == null))
             return;
         
         Log($"Receive code: {string.Join(";", playerInput.Select(x => x))}");
@@ -144,7 +144,7 @@ public class MastermindBase : MonoBehaviour
     {
         ReceiveItem(args.Instance.ItemSettings, args.SlotIndex);
 
-        _allItemsPlaced = !playerInput.Any(x => x == ElementType.Empty || x == ElementType.Confirm);
+        _allItemsPlaced = playerInput.All(x => x != null);
 
         if (_allItemsPlaced)
         {
@@ -157,7 +157,7 @@ public class MastermindBase : MonoBehaviour
     {
         Debug.Log($"Item {args.Instance.ItemSettings.elementType} removed from Slot {args.SlotIndex}");
         
-        playerInput[args.SlotIndex] = ElementType.Empty;
+        playerInput[args.SlotIndex] = null;
         _allItemsPlaced = false;
         _audioSource.Stop();
     }
@@ -170,7 +170,7 @@ public class MastermindBase : MonoBehaviour
         {
             if (slotPos < numMaxElements)
             {
-                playerInput[slotPos] = inputType;
+                playerInput[slotPos] = item;
 
                 Log(string.Format("Placed item {0} on slot {1}", inputType.ToString(), slotPos)); //"Received Item: " + inputType
             }
@@ -194,7 +194,7 @@ public class MastermindBase : MonoBehaviour
 
     void ClearPlayerCode()
     {
-        playerInput = new ElementType[numMaxElements];
+        playerInput = new Item[numMaxElements];
     }
 
     void GenerateResultCode()
@@ -268,7 +268,8 @@ public class MastermindBase : MonoBehaviour
         {
             results[i] = GetPointForInput(i);
         }
-        entry.GetComponent<HistoryEntry>().InitializeEntry(results);
+        
+        entry.GetComponent<HistoryEntry>().InitializeEntry(playerInput, results);
 
 
         yield return new WaitForSeconds(1);
@@ -295,7 +296,7 @@ public class MastermindBase : MonoBehaviour
     {
         int amount = 0;
 
-        var input = playerInput[index];
+        var input = playerInput[index].elementType;
         
         //Correct item, correct position
         if (resultCode[index] == input)

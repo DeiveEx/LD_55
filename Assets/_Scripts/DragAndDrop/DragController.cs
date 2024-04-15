@@ -16,6 +16,7 @@ public class DragController : MonoBehaviour
     private Vector2 _mousePos;
     private Vector3 _targetPos;
     private bool _canGrabObjects;
+    private GameObject _lastHoveredObject;
     
     private IEventBus EventBus => GameManager.Instance.EventBus;
 
@@ -56,12 +57,9 @@ public class DragController : MonoBehaviour
     public void OnMove(InputValue value)
     {
         _mousePos = value.Get<Vector2>();
-        var ray = _camera.ScreenPointToRay(_mousePos);
         
-        if(!Physics.Raycast(ray, out var hit, 1000, _groundMask))
-            return;
-
-        _targetPos = hit.point - (ray.direction * _heldHeight);
+        GetHeldPosition();
+        UpdateHoverObject();
     }
 
     public void OnGrab(InputValue value)
@@ -130,5 +128,37 @@ public class DragController : MonoBehaviour
         
         _heldObject.OnDrop();
         _heldObject = null;
+    }
+
+    private void GetHeldPosition()
+    {
+        var ray = _camera.ScreenPointToRay(_mousePos);
+        
+        if(!Physics.Raycast(ray, out var hit, 1000, _groundMask))
+            return;
+
+        _targetPos = hit.point - (ray.direction * _heldHeight);
+    }
+
+    private void UpdateHoverObject()
+    {
+        var ray = _camera.ScreenPointToRay(_mousePos);
+
+        if(!Physics.Raycast(ray, out var hit, 1000))
+            return;
+        
+        if(hit.collider.gameObject == _lastHoveredObject)
+            return;
+
+        _lastHoveredObject = hit.collider.gameObject;
+        var historyEntry = _lastHoveredObject.GetComponentInParent<HistoryEntry>();
+
+        if (historyEntry != null)
+        {
+            EventBus.Send(new OnHoverHistoryObjectChangedEvent() {HistoryEntry = historyEntry});
+            return;
+        }
+        
+        EventBus.Send(new OnHoverHistoryObjectChangedEvent() {HistoryEntry = null});
     }
 }

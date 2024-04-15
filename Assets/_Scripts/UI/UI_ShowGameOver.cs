@@ -8,6 +8,7 @@ public class UI_ShowGameOver : MonoBehaviour
     [SerializeField] private CanvasGroup canvasGroup;
 
     private IEventBus EventBus => GameManager.Instance.EventBus;
+    
     private void OnEnable()
     {
         EventBus.Register<OnPlayerLost>(ShowUI);

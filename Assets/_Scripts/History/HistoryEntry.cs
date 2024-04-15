@@ -1,16 +1,19 @@
-using System.Collections;
-using System.Collections.Generic;
 using UnityEngine;
 
 public class HistoryEntry : MonoBehaviour
 {
     public HistorySphere[] entries;
+    public Item[] sequence;
+    public int[] points;
 
-    public void InitializeEntry(int[] Results)
+    public void InitializeEntry(Item[] sequence, int[] points)
     {
-        for (int result = 0; result < Results.Length; result++)
+        this.sequence = sequence;
+        this.points = points;
+        
+        for (int result = 0; result < points.Length; result++)
         {
-            entries[result].UpdateMaterial(Results[result]);
+            entries[result].UpdateMaterial(points[result]);
         }
     }
 }
