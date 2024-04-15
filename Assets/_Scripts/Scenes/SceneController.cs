@@ -1,5 +1,3 @@
-using System.Collections;
-using System.Collections.Generic;
 using Ignix.EventBusSystem;
 using UnityEngine;
 using UnityEngine.SceneManagement;
@@ -29,7 +27,6 @@ public class SceneController : MonoBehaviour
         {
             Application.Quit();
         }
-
     }
 
     void RestartScene()
@@ -37,12 +34,12 @@ public class SceneController : MonoBehaviour
         string currentSceneName = SceneManager.GetActiveScene().name;
         SceneManager.LoadScene(currentSceneName);
     }
-
-    public void GoToNextScene()
+    
+    public void GoToScene(string sceneName)
     {
-        SceneManager.LoadScene(SceneManager.GetActiveScene().buildIndex + 1);
+        SceneManager.LoadScene(sceneName);
     }
-
+    
     public void GoToMainScene()
     {
         SceneManager.LoadScene(0);
