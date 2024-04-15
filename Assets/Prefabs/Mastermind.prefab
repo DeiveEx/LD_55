@@ -48,7 +48,7 @@ MonoBehaviour:
   _loveGaugeUI: {fileID: 0}
   _currentDayDisplay: {fileID: 0}
   _audioSource: {fileID: 243928306571537299}
-  _submitClip: {fileID: 8300000, guid: 221b654abcddf5341855f99eea43877a, type: 3}
+  _submitClip: {fileID: 8300000, guid: fb2f1540017b15841b892255b7f01f59, type: 3}
   maxNumTurns: 7
   currentTurn: 0
   _minMaxEmotionIndex: {x: 0, y: 8}

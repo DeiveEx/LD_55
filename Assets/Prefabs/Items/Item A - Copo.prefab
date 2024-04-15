@@ -70,6 +70,11 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 9029678845924695854, guid: 379e446118018dc49a893166924493bb,
         type: 3}
+      propertyPath: _hitSound
+      value: 
+      objectReference: {fileID: 8300000, guid: 6377c65ff5dab78488aa0fc2969f4556, type: 3}
+    - target: {fileID: 9029678845924695854, guid: 379e446118018dc49a893166924493bb,
+        type: 3}
       propertyPath: _itemSettings
       value: 
       objectReference: {fileID: 11400000, guid: 156b4429bb80dcd41bf6720b4908e82b,
