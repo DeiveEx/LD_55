@@ -1,17 +1,23 @@
 using System.Collections;
 using System.Collections.Generic;
+using Ignix.EventBusSystem;
 using UnityEngine;
 using UnityEngine.SceneManagement;
 
 public class SceneController : MonoBehaviour
 {
-    // Start is called before the first frame update
-    void Start()
+    private IEventBus EventBus => GameManager.Instance.EventBus;
+
+    private void OnEnable()
     {
-        
+        EventBus.Register<OnReturnToMenuScene>(GoToMainScene);
     }
 
-    // Update is called once per frame
+    private void OnDisable()
+    {
+        EventBus.Unregister<OnReturnToMenuScene>(GoToMainScene);
+    }
+
     void Update()
     {
         if (Input.GetKeyDown(KeyCode.R))
@@ -29,5 +35,15 @@ public class SceneController : MonoBehaviour
     public void GoToNextScene()
     {
         SceneManager.LoadScene(SceneManager.GetActiveScene().buildIndex + 1);
+    }
+
+    public void GoToMainScene()
+    {
+        SceneManager.LoadScene(0);
+    }
+
+    void GoToMainScene(OnReturnToMenuScene args)
+    {
+        GoToMainScene();
     }
 }

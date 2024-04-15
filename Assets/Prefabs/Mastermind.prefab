@@ -44,10 +44,14 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 8cb0684135461e24db682524f9fd4db7, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  _loveGaugeUI: {fileID: 0}
+  _currentDayDisplay: {fileID: 0}
   maxNumTurns: 7
   currentTurn: 0
+  _minMaxEmotionIndex: {x: 0, y: 8}
   numMaxElements: 5
   numMaxSlots: 0
+  _confirmWaitTime: 1
   autoPlayCode: 0
   turnMoment: 0
   resultCode: 
