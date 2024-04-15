@@ -8,13 +8,19 @@ using Random = UnityEngine.Random;
 
 public class MastermindBase : MonoBehaviour
 {
+    [Header("References")]
+    public LoveGaugeUI _loveGaugeUI;
+    public CurrentDayUI _currentDayDisplay;
+    
     [Header("Settings")]
     public int maxNumTurns = 7;
     public int currentTurn = 0;
+    public Vector2Int _minMaxEmotionIndex = new Vector2Int(0, 8);
 
     public int numMaxElements = 4;
 
     public int numMaxSlots;
+    public float _confirmWaitTime = 3f;
 
     [Space]
     [Tooltip("If the player ")]
@@ -24,33 +30,33 @@ public class MastermindBase : MonoBehaviour
     public TurnMoment turnMoment;
     public ElementType[] resultCode;
     public ElementType[] playerInput;
-    public LoveGaugeUI _loveGaugeUI;
 
     [Header("Not Implemented")]
     // Play history
     [Space]
     [SerializeField] int playerInputIndex;
 
+    private bool _allItemsPlaced;
+    
     // --- Event Buss ---
     private IEventBus EventBus => GameManager.Instance.EventBus;
 
     private void OnEnable()
     {
         EventBus.Register<OnObjectPlacedOnItemSlotEvent>(ObjectPlacedOnSlot);
+        EventBus.Register<OnObjectRemovedFromItemSlotEvent>(ObjectRemovedFromSlot);
         EventBus.Register<OnSubmitCode>(CodeSubmitted);
     }
 
     private void OnDisable()
     {
         EventBus.Unregister<OnObjectPlacedOnItemSlotEvent>(ObjectPlacedOnSlot);
+        EventBus.Unregister<OnObjectRemovedFromItemSlotEvent>(ObjectRemovedFromSlot);
         EventBus.Unregister<OnSubmitCode>(CodeSubmitted);
     }
 
     private void Start()
     {
-        _loveGaugeUI.SetArrowToSection(Random.Range(0, _loveGaugeUI.SectionsAmount));
-        GenerateResultCode();
-        
         StartGameplay();
     }
 
@@ -65,19 +71,37 @@ public class MastermindBase : MonoBehaviour
 
     void StartGameplay()
     {
+        _loveGaugeUI.SetArrowToSection(Random.Range(_minMaxEmotionIndex.x, _minMaxEmotionIndex.y));
+        GenerateResultCode();
+        ResetMagicCircle();
+        
         ResetGame();
         turnMoment = TurnMoment.ReceivingInput;
+        _currentDayDisplay.SetCurrentDay(currentTurn);
     }
 
     void AdvanceTurn()
     {
         currentTurn++;
         playerInputIndex = 0;
+        ClearPlayerCode();
         Log("Next Turn");
+        
+        _currentDayDisplay.SetCurrentDay(currentTurn);
+        EventBus.Send(new OnTurnStartedEvent());
     }
 
     void CodeSubmitted(OnSubmitCode args)
     {
+        CodeSubmitted();
+    }
+
+    private void CodeSubmitted()
+    {
+        //Is the code valid?
+        if(playerInput.Any(x => x == ElementType.Empty || x == ElementType.Confirm))
+            return;
+        
         Log($"Receive code: {string.Join(";", playerInput.Select(x => x))}");
         if (turnMoment == TurnMoment.ReceivingInput)    // Also check if all slots are filled
         {
@@ -88,6 +112,20 @@ public class MastermindBase : MonoBehaviour
     void ObjectPlacedOnSlot(OnObjectPlacedOnItemSlotEvent args)
     {
         ReceiveItem(args.Instance.ItemSettings, args.SlotIndex);
+
+        _allItemsPlaced = !playerInput.Any(x => x == ElementType.Empty || x == ElementType.Confirm);
+
+        if (_allItemsPlaced)
+        {
+            Debug.Log($"All Items placed: {_allItemsPlaced}");
+            StartCoroutine(SubmitCountdownRoutine());
+        }
+    }
+
+    private void ObjectRemovedFromSlot(OnObjectRemovedFromItemSlotEvent ars)
+    {
+        Debug.Log($"Item {ars.Instance.ItemSettings.elementType} removed from Slot {ars.SlotIndex}");
+        _allItemsPlaced = false;
     }
 
     void ReceiveItem(Item item, int slotPos)
@@ -150,9 +188,10 @@ public class MastermindBase : MonoBehaviour
 
     private IEnumerator CheckCodeRoutine()
     {
+        ResetMagicCircle();
+        
         //First, check if we got the right code
         List<bool> options = new();
-        EventBus.Send(new HighlighCodeEvent() { ShouldHighlight = options }); //Reset
 
         for (int i = 0; i < playerInput.Length; i++)
         {
@@ -162,8 +201,7 @@ public class MastermindBase : MonoBehaviour
         EventBus.Send(new HighlighCodeEvent() { ShouldHighlight = options });
         yield return new WaitForSeconds(1);
 
-        options = options.Select(x => false).ToList();
-        EventBus.Send(new HighlighCodeEvent() { ShouldHighlight = options }); //Reset
+        ResetMagicCircle();
 
         //Then show the player the result of each option
         for (int i = 0; i < options.Count; i++)
@@ -185,15 +223,26 @@ public class MastermindBase : MonoBehaviour
         }
         
         //Finally, go to the next turn
-        for (int i = 0; i < options.Count; i++)
-        {
-            options[i] = false;
-        }
-        
-        EventBus.Send(new HighlighCodeEvent() { ShouldHighlight = options });
+        ResetMagicCircle();
 
         yield return new WaitForSeconds(1);
         AdvanceTurn();
+    }
+    
+    private IEnumerator SubmitCountdownRoutine()
+    {
+        float timePassed = 0;
+
+        while (timePassed < _confirmWaitTime)
+        {
+            timePassed += Time.deltaTime;
+            yield return null;
+            
+            if(!_allItemsPlaced)
+                yield break;
+        }
+        
+        CodeSubmitted();
     }
 
     private int GetPointForInput(int index)
@@ -225,5 +274,18 @@ public class MastermindBase : MonoBehaviour
     {
         Debug.Log(text);
         EventBus.Send(new OnPrintDebug() { Text = text });
+    }
+    
+    private void ResetMagicCircle()
+    {
+        //Reset maic circle
+        List<bool> circleHighlightSections = new();
+
+        for (int i = 0; i < numMaxElements; i++)
+        {
+            circleHighlightSections.Add(false);
+        }
+        
+        EventBus.Send(new HighlighCodeEvent() { ShouldHighlight = circleHighlightSections }); 
     }
 }
