@@ -75,7 +75,7 @@ public class MastermindBase : MonoBehaviour
     {
         _loveGaugeUI.SetArrowToSection(Random.Range(_minMaxEmotionIndex.x, _minMaxEmotionIndex.y));
         GenerateResultCode();
-        ResetMagicCircle();
+        FillMagicCircle(false);
         
         ResetGame();
         turnMoment = TurnMoment.ReceivingInput;
@@ -119,15 +119,16 @@ public class MastermindBase : MonoBehaviour
 
         if (_allItemsPlaced)
         {
-            _audioSource.PlayOneShot(_submitClip);
             Debug.Log($"All Items placed: {_allItemsPlaced}");
             StartCoroutine(SubmitCountdownRoutine());
         }
     }
 
-    private void ObjectRemovedFromSlot(OnObjectRemovedFromItemSlotEvent ars)
+    private void ObjectRemovedFromSlot(OnObjectRemovedFromItemSlotEvent args)
     {
-        Debug.Log($"Item {ars.Instance.ItemSettings.elementType} removed from Slot {ars.SlotIndex}");
+        Debug.Log($"Item {args.Instance.ItemSettings.elementType} removed from Slot {args.SlotIndex}");
+        
+        playerInput[args.SlotIndex] = ElementType.Empty;
         _allItemsPlaced = false;
         _audioSource.Stop();
     }
@@ -192,20 +193,21 @@ public class MastermindBase : MonoBehaviour
 
     private IEnumerator CheckCodeRoutine()
     {
-        ResetMagicCircle();
-        
+        _audioSource.PlayOneShot(_submitClip);
+
+        FillMagicCircle(true);
+        yield return new WaitForSeconds(1);
+        FillMagicCircle(false);
+
         //First, check if we got the right code
         List<bool> options = new();
 
         for (int i = 0; i < playerInput.Length; i++)
         {
-            options.Add(GetPointForInput(i) == 1);
+            options.Add(false);
         }
-
-        EventBus.Send(new HighlighCodeEvent() { ShouldHighlight = options });
-        yield return new WaitForSeconds(1);
-
-        ResetMagicCircle();
+        
+        FillMagicCircle(false);
 
         //Then show the player the result of each option
         for (int i = 0; i < options.Count; i++)
@@ -227,7 +229,7 @@ public class MastermindBase : MonoBehaviour
         }
         
         //Finally, go to the next turn
-        ResetMagicCircle();
+        FillMagicCircle(false);
 
         yield return new WaitForSeconds(1);
         AdvanceTurn();
@@ -280,14 +282,14 @@ public class MastermindBase : MonoBehaviour
         EventBus.Send(new OnPrintDebug() { Text = text });
     }
     
-    private void ResetMagicCircle()
+    private void FillMagicCircle(bool isOn)
     {
         //Reset maic circle
         List<bool> circleHighlightSections = new();
 
         for (int i = 0; i < numMaxElements; i++)
         {
-            circleHighlightSections.Add(false);
+            circleHighlightSections.Add(isOn);
         }
         
         EventBus.Send(new HighlighCodeEvent() { ShouldHighlight = circleHighlightSections }); 

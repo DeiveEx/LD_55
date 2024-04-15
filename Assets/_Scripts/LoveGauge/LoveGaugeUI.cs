@@ -15,6 +15,7 @@ public class LoveGaugeUI : MonoBehaviour
     [SerializeField] private Ease _animEase;
     [SerializeField] private float _shakeStrenght;
     [SerializeField] private int _shakeFrequency;
+    [SerializeField] private AudioSource _AudioSource;
 
     private int _currentSectionIndex;
 
@@ -79,6 +80,8 @@ public class LoveGaugeUI : MonoBehaviour
                 _arrowHead.transform.DOShakeRotation(_animDuration, new Vector3(0, 0, _shakeStrenght), _shakeFrequency).SetEase(_animEase);
             else
                 _arrowHead.transform.DORotateQuaternion(Quaternion.Euler(rot), _animDuration).SetEase(_animEase);
+            
+            _AudioSource.Play();
         }
         else
         {
