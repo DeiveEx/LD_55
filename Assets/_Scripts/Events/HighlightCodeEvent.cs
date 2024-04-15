@@ -1,7 +1,8 @@
 using System;
 using System.Collections.Generic;
 
-public class HighlighCodeEvent : EventArgs
+public class HighlightCodeEvent : EventArgs
 {
-    public List<bool> ShouldHighlight = new();
+    public List<bool> EntryHighlights = new();
+    public List<int> EntryPoints = new();
 }

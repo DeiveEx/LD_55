@@ -29,7 +29,7 @@ public class MastermindBase : MonoBehaviour
     public bool autoPlayCode = false;
 
     [Header("Gameplay")]
-    public TurnMoment turnMoment;
+    public GameState currentGameState;
     public ElementType[] resultCode;
     public ElementType[] playerInput;
 
@@ -72,20 +72,22 @@ public class MastermindBase : MonoBehaviour
     {
         currentTurn = 0;
         playerInputIndex = 0;
-        turnMoment = TurnMoment.Beggining;
 
         ClearPlayerCode();
     }
 
     void StartGameplay()
     {
+        SetGameState(GameState.Start);
+        
         _loveGaugeUI.SetArrowToSection(Random.Range(_minMaxEmotionIndex.x, _minMaxEmotionIndex.y));
         GenerateResultCode();
         FillMagicCircle(false);
         
         ResetGame();
-        turnMoment = TurnMoment.ReceivingInput;
         _currentDayDisplay.SetCurrentDay(currentTurn);
+        
+        SetGameState(GameState.ReceivingInput);
     }
 
     void AdvanceTurn()
@@ -97,6 +99,7 @@ public class MastermindBase : MonoBehaviour
         
         _currentDayDisplay.SetCurrentDay(currentTurn);
         EventBus.Send(new OnTurnStartedEvent());
+        SetGameState(GameState.ReceivingInput);
     }
 
     void CodeSubmitted(OnSubmitCode args)
@@ -111,7 +114,7 @@ public class MastermindBase : MonoBehaviour
             return;
         
         Log($"Receive code: {string.Join(";", playerInput.Select(x => x))}");
-        if (turnMoment == TurnMoment.ReceivingInput)    // Also check if all slots are filled
+        if (currentGameState == GameState.ReceivingInput)    // Also check if all slots are filled
         {
             StartCoroutine(CheckCodeRoutine());
         }
@@ -143,7 +146,7 @@ public class MastermindBase : MonoBehaviour
     {
         var inputType = item.elementType;
 
-        if (turnMoment == TurnMoment.ReceivingInput && inputType != ElementType.Empty)
+        if (currentGameState == GameState.ReceivingInput && inputType != ElementType.Empty)
         {
             if (slotPos < numMaxElements)
             {
@@ -200,6 +203,7 @@ public class MastermindBase : MonoBehaviour
     private IEnumerator CheckCodeRoutine()
     {
         _audioSource.PlayOneShot(_submitClip);
+        SetGameState(GameState.CheckingCode);
 
         FillMagicCircle(true);
         yield return new WaitForSeconds(1);
@@ -224,7 +228,7 @@ public class MastermindBase : MonoBehaviour
             }
             
             //Highlight the option
-            EventBus.Send(new HighlighCodeEvent() { ShouldHighlight = options });
+            EventBus.Send(new HighlightCodeEvent() { EntryHighlights = options });
             yield return new WaitForSeconds(.5f);
 
             int amount = GetPointForInput(i);
@@ -308,6 +312,12 @@ public class MastermindBase : MonoBehaviour
             circleHighlightSections.Add(isOn);
         }
         
-        EventBus.Send(new HighlighCodeEvent() { ShouldHighlight = circleHighlightSections }); 
+        EventBus.Send(new HighlightCodeEvent() { EntryHighlights = circleHighlightSections });
+    }
+
+    private void SetGameState(GameState targetState)
+    {
+        currentGameState = targetState;
+        EventBus.Send(new OnGameStateChangedEvent() {GameState = currentGameState});
     }
 }

@@ -12,21 +12,21 @@ public class MagicCircle : MonoBehaviour
 
     private void Awake()
     {
-        EventBus.Register<HighlighCodeEvent>(OnHighlight);
+        EventBus.Register<HighlightCodeEvent>(OnHighlight);
     }
 
     private void OnDestroy()
     {
-        EventBus.Unregister<HighlighCodeEvent>(OnHighlight);
+        EventBus.Unregister<HighlightCodeEvent>(OnHighlight);
     }
 
-    private void OnHighlight(HighlighCodeEvent args)
+    private void OnHighlight(HighlightCodeEvent args)
     {
-        Debug.Log($"Code received: {string.Join(";", args.ShouldHighlight.Select(x => x))}");
-        for (int i = 0; i < args.ShouldHighlight.Count; i++)
+        Debug.Log($"Code received: {string.Join(";", args.EntryHighlights.Select(x => x))}");
+        for (int i = 0; i < args.EntryHighlights.Count; i++)
         {
             float current = _mesh.material.GetFloat($"_HighlightEdge{i}");
-            float target = args.ShouldHighlight[i] ? 1 : 0;
+            float target = args.EntryHighlights[i] ? 1 : 0;
             int index = i;
 
             DOTween.To(value =>

@@ -1,4 +1,3 @@
-using System;
 using Ignix.EventBusSystem;
 using UnityEngine;
 using UnityEngine.InputSystem;
@@ -16,6 +15,7 @@ public class DragController : MonoBehaviour
     private GrabbableObject _heldObject;
     private Vector2 _mousePos;
     private Vector3 _targetPos;
+    private bool _canGrabObjects;
     
     private IEventBus EventBus => GameManager.Instance.EventBus;
 
@@ -24,11 +24,13 @@ public class DragController : MonoBehaviour
         _camera = Camera.main;
         
         EventBus.Register<OnObjectPlacedOnItemSlotEvent>(OnObjectPlaced);
+        EventBus.Register<OnGameStateChangedEvent>(OnGameStateChanged);
     }
 
     private void OnDestroy()
     {
         EventBus.Unregister<OnObjectPlacedOnItemSlotEvent>(OnObjectPlaced);
+        EventBus.Unregister<OnGameStateChangedEvent>(OnGameStateChanged);
     }
 
     private void Update()
@@ -37,6 +39,18 @@ public class DragController : MonoBehaviour
             return;
 
         _heldObject.transform.position = Vector3.Lerp(_heldObject.transform.position, _targetPos, _dragSnappines);
+    }
+    
+    private void OnGameStateChanged(OnGameStateChangedEvent args)
+    {
+        if (args.GameState == GameState.ReceivingInput)
+        {
+            _canGrabObjects = true;
+            return;
+        }
+        
+        _canGrabObjects = false;
+        FreeDrop();
     }
 
     public void OnMove(InputValue value)
@@ -69,6 +83,9 @@ public class DragController : MonoBehaviour
 
     private void TryGrabObject()
     {
+        if(!_canGrabObjects)
+            return;
+        
         var ray = _camera.ScreenPointToRay(_mousePos);
         
         Debug.DrawRay(ray.origin, ray.direction * 1000, Color.red, 2);
@@ -85,6 +102,9 @@ public class DragController : MonoBehaviour
 
     private void DropObject()
     {
+        if(_heldObject == null)
+            return;
+        
         //Check if there's an itemSlot below
         var ray = _camera.ScreenPointToRay(_mousePos);
         bool placed = false;
@@ -103,6 +123,9 @@ public class DragController : MonoBehaviour
 
     private void FreeDrop()
     {
+        if(_heldObject == null)
+            return;
+        
         _heldObject.OnDrop();
         _heldObject = null;
     }

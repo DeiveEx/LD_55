@@ -24,13 +24,12 @@ public enum ElementType{
     Confirm
 }
 
-public enum TurnMoment
+public enum GameState
 {
-    Beggining,
+    Start,
     ReceivingInput,
-    CheckingWin,
+    CheckingCode,
     GameOver
-
 }
 
 [System.Flags]
