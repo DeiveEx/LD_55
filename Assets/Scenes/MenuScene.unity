@@ -1316,7 +1316,7 @@ MonoBehaviour:
     e erro \xE9 refletido no Ponteiro de Afeto:\r\n- Erros fazem o ponteiro descer
     1 est\xE1gio.\r\n- Quase acertos o ponteiro se manter em posi\xE7\xE3o.\r\n-
     Acertos fazem o ponteiro subir 1 est\xE1gio.\r\n\r\nMas tome cuidado! Fazer uma
-    pessoa amar demais pode ter o resultado oposto ao que voc\xEA espera!"
+    pessoa amar demais pode n\xE3o ter o resultado que voc\xEA espera..."
   m_isRightToLeft: 0
   m_fontAsset: {fileID: 11400000, guid: 8f586378b4e144a9851e7b34d9b748ee, type: 2}
   m_sharedMaterial: {fileID: 2180264, guid: 8f586378b4e144a9851e7b34d9b748ee, type: 2}
@@ -2373,12 +2373,12 @@ MonoBehaviour:
       m_Calls: []
   m_text: "Voc\xEA tem 7 dias para trazer o amor de seu cliente de volta!\r\n\r\nArraste
     itens da mesa para o Prato de Simpatia e mude o n\xEDvel de afeto que a pessoa
-    sente! Mas cuidado, cada pessoa pessoa \xE9 \xFAnica e cada item da simpatia
-    afeta o n\xEDvel de amor dela de forma diferente.\r\n\r\nQuando um item \xE9
-    colocado no prato de simpatia, voc\xEA pode conseguir 3 resultados:\r\n- Errado:
-    o item n\xE3o deveria ter ido naquela Simpatia.\r\n- Quase Certo: o item vai
-    naquela Simpatia, mas n\xE3o naquela posi\xE7\xE3o.\r\n- Certo: o item vai naquela
-    simpatia e est\xE1 na posi\xE7\xE3o correta"
+    sente! Mas preste aten\xE7\xE3o: cada pessoa pessoa \xE9 \xFAnica e cada item
+    da simpatia afeta o n\xEDvel de amor dela de forma diferente.\r\n\r\nQuando um
+    item \xE9 colocado no prato de simpatia, voc\xEA pode conseguir 3 resultados:\r\n-
+    Errado: o item n\xE3o deveria ter ido naquela Simpatia.\r\n- Quase Certo: o item
+    vai naquela Simpatia, mas n\xE3o naquela posi\xE7\xE3o.\r\n- Certo: o item vai
+    naquela simpatia e est\xE1 na posi\xE7\xE3o correta"
   m_isRightToLeft: 0
   m_fontAsset: {fileID: 11400000, guid: 8f586378b4e144a9851e7b34d9b748ee, type: 2}
   m_sharedMaterial: {fileID: 2180264, guid: 8f586378b4e144a9851e7b34d9b748ee, type: 2}
