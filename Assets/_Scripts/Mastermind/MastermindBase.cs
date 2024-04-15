@@ -92,14 +92,34 @@ public class MastermindBase : MonoBehaviour
 
     void AdvanceTurn()
     {
+        Log("Next Turn");
         currentTurn++;
         playerInputIndex = 0;
         ClearPlayerCode();
-        Log("Next Turn");
         
-        _currentDayDisplay.SetCurrentDay(currentTurn);
-        EventBus.Send(new OnTurnStartedEvent());
-        SetGameState(GameState.ReceivingInput);
+        if (currentTurn == maxNumTurns)
+        {
+            CheckEndGameResult();
+        }
+        else
+        {
+            _currentDayDisplay.SetCurrentDay(currentTurn);
+            EventBus.Send(new OnTurnStartedEvent());
+            SetGameState(GameState.ReceivingInput);
+        }
+    }
+    
+    [ContextMenu("CheckEndGame")]
+    void CheckEndGameResult()
+    {
+        if (_loveGaugeUI.CurrentSectionIndex == _loveGaugeUI.SectionsAmount -1)
+        {
+            EventBus.Send(new OnPlayerWon() { });
+        }
+        else
+        {
+            EventBus.Send(new OnPlayerLost() { });
+        }
     }
 
     void CodeSubmitted(OnSubmitCode args)
