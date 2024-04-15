@@ -24,6 +24,12 @@ public class SceneController : MonoBehaviour
         {
             RestartScene();
         }
+
+        if (Input.GetKeyDown(KeyCode.Escape))
+        {
+            Application.Quit();
+        }
+
     }
 
     void RestartScene()
