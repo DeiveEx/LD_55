@@ -33,10 +33,16 @@ public class MastermindBase : MonoBehaviour
     public ElementType[] resultCode;
     public ElementType[] playerInput;
 
+    [Header("History")]
+    public GameObject historyOrigin;
+    public GameObject historyEntryPrefab;
+    
+
     [Header("Not Implemented")]
     // Play history
     [Space]
     [SerializeField] int playerInputIndex;
+    
 
     private bool _allItemsPlaced;
     
@@ -230,6 +236,16 @@ public class MastermindBase : MonoBehaviour
         
         //Finally, go to the next turn
         FillMagicCircle(false);
+
+        //History 
+        GameObject entry = Instantiate<GameObject>(historyEntryPrefab, historyOrigin.transform.position + new Vector3(currentTurn * 0.425f + 0.1f, 0.0f, 0.0f), Quaternion.identity);
+        int[] results = new int[5];
+        for(int i = 0; i < results.Length; i++)
+        {
+            results[i] = GetPointForInput(i);
+        }
+        entry.GetComponent<HistoryEntry>().InitializeEntry(results);
+
 
         yield return new WaitForSeconds(1);
         AdvanceTurn();

@@ -8,8 +8,7 @@ public class HistoryEntry : MonoBehaviour
 
     public void InitializeEntry(int[] Results)
     {
-
-        for(int result = 0; result < Results.Length; result++)
+        for (int result = 0; result < Results.Length; result++)
         {
             entries[result].UpdateMaterial(Results[result]);
         }

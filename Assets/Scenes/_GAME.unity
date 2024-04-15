@@ -1764,7 +1764,7 @@ PrefabInstance:
     - target: {fileID: 8310344729010757033, guid: c799ebd113164a44da09049d16478002,
         type: 3}
       propertyPath: m_Name
-      value: Item D
+      value: Item D - Arruda
       objectReference: {fileID: 0}
     m_RemovedComponents: []
     m_RemovedGameObjects: []
@@ -2094,7 +2094,7 @@ PrefabInstance:
     - target: {fileID: 8310344729010757033, guid: 7317d96fb16ce6545859b9a0305b61e9,
         type: 3}
       propertyPath: m_Name
-      value: Item E
+      value: Item E - Carranca
       objectReference: {fileID: 0}
     m_RemovedComponents: []
     m_RemovedGameObjects: []
@@ -2217,7 +2217,7 @@ PrefabInstance:
     - target: {fileID: 8310344729010757033, guid: aed1b2446ef9b85489d53c9f8e592783,
         type: 3}
       propertyPath: m_Name
-      value: Item H
+      value: Item H - Muiraquita
       objectReference: {fileID: 0}
     m_RemovedComponents: []
     m_RemovedGameObjects: []
@@ -2465,14 +2465,30 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 8013069321959591647, guid: 3bab13b4bd6d6f54b8649e1d159f46c8,
         type: 3}
+      propertyPath: history
+      value: 
+      objectReference: {fileID: 1592138661}
+    - target: {fileID: 8013069321959591647, guid: 3bab13b4bd6d6f54b8649e1d159f46c8,
+        type: 3}
       propertyPath: _loveGaugeUI
       value: 
       objectReference: {fileID: 7326852927886672250}
     - target: {fileID: 8013069321959591647, guid: 3bab13b4bd6d6f54b8649e1d159f46c8,
         type: 3}
+      propertyPath: historyOrigin
+      value: 
+      objectReference: {fileID: 1592138660}
+    - target: {fileID: 8013069321959591647, guid: 3bab13b4bd6d6f54b8649e1d159f46c8,
+        type: 3}
       propertyPath: _currentDayDisplay
       value: 
       objectReference: {fileID: 7321770815820695583}
+    - target: {fileID: 8013069321959591647, guid: 3bab13b4bd6d6f54b8649e1d159f46c8,
+        type: 3}
+      propertyPath: historyEntryPrefab
+      value: 
+      objectReference: {fileID: 3485636673333920996, guid: 6a832e7bdf68daa4c84e1c6a0e037a80,
+        type: 3}
     m_RemovedComponents: []
     m_RemovedGameObjects: []
     m_AddedGameObjects: []
@@ -2578,6 +2594,50 @@ Transform:
     type: 3}
   m_PrefabInstance: {fileID: 1577493921}
   m_PrefabAsset: {fileID: 0}
+--- !u!1 &1592138660
+GameObject:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  serializedVersion: 6
+  m_Component:
+  - component: {fileID: 1592138662}
+  - component: {fileID: 1592138661}
+  m_Layer: 0
+  m_Name: History
+  m_TagString: Untagged
+  m_Icon: {fileID: 0}
+  m_NavMeshLayer: 0
+  m_StaticEditorFlags: 0
+  m_IsActive: 1
+--- !u!114 &1592138661
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1592138660}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 704edac2158d19146a8ae54da8cbc45e, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+--- !u!4 &1592138662
+Transform:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1592138660}
+  serializedVersion: 2
+  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
+  m_LocalPosition: {x: -1.374, y: 0.022, z: 1.125}
+  m_LocalScale: {x: 1, y: 1, z: 1}
+  m_ConstrainProportionsScale: 0
+  m_Children: []
+  m_Father: {fileID: 0}
+  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!1 &1607015907
 GameObject:
   m_ObjectHideFlags: 0
@@ -3192,7 +3252,7 @@ PrefabInstance:
     - target: {fileID: 8310344729010757033, guid: 3615060f71a12e7409c38d7ae8d16379,
         type: 3}
       propertyPath: m_Name
-      value: Item F
+      value: Item F - Incenso
       objectReference: {fileID: 0}
     m_RemovedComponents: []
     m_RemovedGameObjects: []
@@ -3549,7 +3609,7 @@ PrefabInstance:
     - target: {fileID: 8310344729010757033, guid: 51a7387a9dac7664293cea3b45367202,
         type: 3}
       propertyPath: m_Name
-      value: Item J
+      value: Item J - Origami
       objectReference: {fileID: 0}
     m_RemovedComponents: []
     m_RemovedGameObjects: []
@@ -3794,6 +3854,11 @@ PrefabInstance:
       propertyPath: m_Name
       value: TopBar
       objectReference: {fileID: 0}
+    - target: {fileID: 7880413792779043735, guid: 3022e636359e97747bb910d8b6b4c9c8,
+        type: 3}
+      propertyPath: m_IsActive
+      value: 0
+      objectReference: {fileID: 0}
     - target: {fileID: 8642578843218878628, guid: 3022e636359e97747bb910d8b6b4c9c8,
         type: 3}
       propertyPath: m_Pivot.x
@@ -3895,7 +3960,8 @@ PrefabInstance:
       value: 0
       objectReference: {fileID: 0}
     m_RemovedComponents: []
-    m_RemovedGameObjects: []
+    m_RemovedGameObjects:
+    - {fileID: 7880413792779043735, guid: 3022e636359e97747bb910d8b6b4c9c8, type: 3}
     m_AddedGameObjects: []
     m_AddedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: 3022e636359e97747bb910d8b6b4c9c8, type: 3}
@@ -3927,3 +3993,4 @@ SceneRoots:
   - {fileID: 1797522411}
   - {fileID: 536208418}
   - {fileID: 1732232473}
+  - {fileID: 1592138662}

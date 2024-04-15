@@ -19,7 +19,7 @@ public class HistorySphere : MonoBehaviour
                 r.SetMaterials(new List<Material>() { MisplacedMaterial });
                 break; 
             case 1:
-                r.SetMaterials(new List<Material>() { WrongMaterial });
+                r.SetMaterials(new List<Material>() { CorrectMaterial });
                 break;
 
         }
