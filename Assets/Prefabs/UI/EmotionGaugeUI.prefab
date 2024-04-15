@@ -125,6 +125,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 7afc5361957ac7d43b592e59a0b91967, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  _antiClockwise: 1
   _arrowHead: {fileID: 2068250236700319322}
   _sectionsAmount: 8
   _angleeOffset: 22.5

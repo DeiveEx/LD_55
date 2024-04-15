@@ -7,6 +7,7 @@ using UnityEngine.UI;
 
 public class LoveGaugeUI : MonoBehaviour
 {
+    [SerializeField] private bool _antiClockwise;
     [SerializeField] private Image _arrowHead;
     [SerializeField] private int _sectionsAmount = 8;
     [SerializeField] private float _angleeOffset = 90;
@@ -65,6 +66,9 @@ public class LoveGaugeUI : MonoBehaviour
         float step = 360 / (float)_sectionsAmount;
         rot.z = _currentSectionIndex * step;
         rot.z += _angleeOffset;
+
+        if (_antiClockwise)
+            rot.z = Mathf.Abs(rot.z - 360);
 
         _arrowHead.transform.DOKill();
 
