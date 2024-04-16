@@ -1,3 +1,4 @@
+using System;
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
@@ -6,6 +7,11 @@ public class UI_InstructionScreen : MonoBehaviour
 {
     [SerializeField] private CanvasGroup canvasGroup;
     public bool isOpen = false;
+
+    private void Awake()
+    {
+        Close();
+    }
 
     private void Update()
     {
