@@ -16,12 +16,14 @@ public class HistoryUI : MonoBehaviour
 
     private List<TMP_Text> _entries = new();
     private RectTransform _myRectTransform;
+    private Canvas _canvas;
 
     private IEventBus EventBus => GameManager.Instance.EventBus;
 
     private void Awake()
     {
         _myRectTransform = transform as RectTransform;
+        _canvas = GetComponentInParent<Canvas>();
         
         EventBus.Register<OnHoverHistoryObjectChangedEvent>(OnHoverChanged);
     }
@@ -33,7 +35,9 @@ public class HistoryUI : MonoBehaviour
 
     private void Update()
     {
-        _myRectTransform.anchoredPosition = Mouse.current.position.value;
+        //Position on Mouse
+        RectTransformUtility.ScreenPointToLocalPointInRectangle(_canvas.transform as RectTransform, Mouse.current.position.value, _canvas.worldCamera, out var pos);
+        transform.position = _canvas.transform.TransformPoint(pos);
     }
 
     private void OnHoverChanged(OnHoverHistoryObjectChangedEvent args)
